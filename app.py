@@ -1,8 +1,8 @@
 import streamlit as st
+import numpy as np
 
 st.set_page_config(page_title="Impulse Gate Risk Control Station", layout="wide")
 
-# Total styling overrides to preserve vertical compact alignment and cyan accent rails
 st.markdown("""
     <style>
     .stApp { background-color: #11141d !important; color: #f0f2f5 !important; }
@@ -140,64 +140,51 @@ else:
     risk_multiplier = "100% (Full Size)"
     display_color = "#00c874"
 
-# NATIVE SVG GRAPH VECTOR COMPUTATION (100% Immune to Character Truncation Filters)
-# Map score 1-10 down to vector coordinates inside a 100% width container view
 pct_x = ((op_score - 1.0) / 9.0) * 100.0
-pct_y = 100.0 - (op_score * 10.0)
 
-# Protect the vector layout from collapse by constructing coordinate parameters explicitly
 svg_code = f"""
 <svg viewBox='0 0 400 200' width='100%' height='200' style='background:#151923; overflow:visible;'>
-    <!-- Horizontal Grid ticks background -->
     <line x1='35' y1='30' x2='385' y2='30' stroke='#1c2230' stroke-width='1' />
     <line x1='35' y1='70' x2='385' y2='70' stroke='#1c2230' stroke-width='1' />
     <line x1='35' y1='110' x2='385' y2='110' stroke='#1c2230' stroke-width='1' />
     <line x1='35' y1='150' x2='385' y2='150' stroke='#1c2230' stroke-width='1' />
-    
-    <!-- Axis numeric labeling blocks -->
     <text x='5' y='34' fill='#4d586b' font-size='9'>$30k</text>
     <text x='5' y='74' fill='#4d586b' font-size='9'>$10k</text>
     <text x='5' y='114' fill='#4d586b' font-size='9'>$-10k</text>
     <text x='5' y='154' fill='#4d586b' font-size='9'>$-30k</text>
-    
     <text x='35' y='180' fill='#4d586b' font-size='9'>1</text>
     <text x='122' y='180' fill='#4d586b' font-size='9'>3</text>
     <text x='210' y='180' fill='#4d586b' font-size='9'>5</text>
     <text x='297' y='180' fill='#4d586b' font-size='9'>7</text>
     <text x='380' y='180' fill='#4d586b' font-size='9'>10</text>
-    
     <text x='150' y='195' fill='#828d9e' font-size='10'>Operational Score (O)</text>
-    
-    <!-- Vertical Red Hard-Stop Safety Guideline (Tilt Gate) -->
     <line x1='171' y1='15' x2='171' y2='160' stroke='#d93838' stroke-width='1.5' stroke-dasharray='4,4' />
-    
-    <!-- Multiple Regression Plane Trend Path Line -->
     <line x1='35' y1='160' x2='385' y2='20' stroke='#2b5cbe' stroke-width='2' />
-    
-    <!-- Historical Optimal green cluster metrics distribution node dots -->
     <circle cx='180' cy='65' r='3.5' fill='#00c874' opacity='0.8' />
     <circle cx='195' cy='55' r='3.5' fill='#00c874' opacity='0.8' />
     <circle cx='210' cy='70' r='3.5' fill='#00c874' opacity='0.8' />
     <circle cx='225' cy='48' r='3.5' fill='#00c874' opacity='0.8' />
     <circle cx='240' cy='60' r='3.5' fill='#00c874' opacity='0.8' />
+    <circle cx='{35 + (pct_x * 3.5)}' cy='{160 - (pct_x * 1.4)}' r='5.5' fill='#ffffff' stroke='{display_color}' stroke-width='3.5' />
+</svg>
 """
+
 header_placeholder.markdown(f"""
-
-Psychology Multiple Regression Plane
-{status_html}
-
+    <div class='chart-header'>
+        <span class='chart-title'>Psychology Multiple Regression Plane</span>
+        {status_html}
+    </div>
 """, unsafe_allow_html=True)
 
-Directly inject the fluid SVG into the mobile wrapper element
-
 svg_placeholder.markdown(svg_code, unsafe_allow_html=True)
+
 metrics_placeholder.markdown(f"""
-
-
-Operational Score
-{op_score:.2f}
-
-
+    <div class='metrics-row'>
+        <div class='metric-box'>
+            <div class='metric-title'>Operational Score</div>
+            <div class='metric-number'>{op_score:.2f}</div>
+        </div>
+        <div class='metric-box'>
 Sleep Warning
 {w_sq}
 
