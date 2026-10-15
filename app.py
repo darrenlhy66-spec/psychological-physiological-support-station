@@ -106,7 +106,7 @@ st.markdown("""
 # Wrap everything into a tight vertical container
 with st.container():
     st.markdown("<h1 style='font-size:20px; margin-top: -10px;'>Impulse Gate Risk Control Station</h1>", unsafe_allow_html=True)
-    st.markdown("<div style='color:#8a94a6; font-size:12.5px; margin-bottom:15px; line-height:1.4;'>Layered execution framework treating sleep quality as a baseline risk modifier while tracking live independent behavioral metrics.</div>", unsafe_allow_html=True)
+    st.markdown("<div class='desc-text' style='color:#8a94a6; font-size:12.5px; margin-bottom:15px; line-height:1.4;'>Layered execution framework treating sleep quality as a baseline risk modifier while tracking live independent behavioral metrics.</div>", unsafe_allow_html=True)
 
     # Main Dashboard Card Container
     st.markdown("<div class='cockpit-card'>", unsafe_allow_html=True)
@@ -180,7 +180,7 @@ fig.add_trace(go.Scatter(
 ))
 
 fig.add_trace(go.Scatter(
-    x=[4.5, 4.5], y=[10, 100], mode='lines',
+    x=[4.5, 4.5], y=[0, 100], mode='lines',
     line=dict(color='#ff4a4a', width=1.5, dash='dash'), hoverinfo='skip'
 ))
 
@@ -193,13 +193,10 @@ fig.add_trace(go.Scatter(
 # Mobile Config adjustments optimizing font sizing constraints inside the Plotly container
 fig.update_layout(
     xaxis=dict(title="Operational Score (O)", range=[1, 10], showgrid=True, gridcolor="#1c2230", tickfont=dict(color="#4d586b", size=9), fixedrange=True, titlefont=dict(size=10, color="#828d9e")),
-    yaxis=dict(title="Readiness Index %", range=[10, 100], showgrid=True, gridcolor="#1c2230", tickfont=dict(color="#4d586b", size=9), fixedrange=True, titlefont=dict(size=10, color="#828d9e")),
+    yaxis=dict(title="Readiness Index %", range=[0, 100], showgrid=True, gridcolor="#1c2230", tickfont=dict(color="#4d586b", size=9), fixedrange=True, titlefont=dict(size=10, color="#828d9e")),
 paper_bgcolor='#151923', plot_bgcolor='#151923',
 margin=dict(l=35, r=10, t=10, b=30), height=200, showlegend=False
 )
-
----------------- CONTAINER RENDERING PUSHES ----------------
-
 header_placeholder.markdown(f"""
 
 Psychology Multiple Regression Plane
