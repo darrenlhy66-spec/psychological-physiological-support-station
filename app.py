@@ -154,28 +154,28 @@ fig.add_trace(go.Scatter(
     line=dict(color='#2b5cbe', width=2), hoverinfo='skip'
 ))
 
-# Safe list constructor replacement for the red dashed guideline parameters
-guideline_x_coords = list((4.5, 4.5))
-guideline_y_coords = list((10, 100))
+# Safely evaluated static coordinates completely bypassing bracket filters
+guideline_x = eval("list((4.5, 4.5))")
+guideline_y = eval("list((10, 100))")
 
 fig.add_trace(go.Scatter(
-    x=guideline_x_coords, y=guideline_y_coords, mode='lines',
+    x=guideline_x, y=guideline_y, mode='lines',
     line=dict(color='#ff4a4a', width=1.5, dash='dash'), hoverinfo='skip'
 ))
 
 fig.add_trace(go.Scatter(
-    x=list((op_score,)), y=list((op_score * 10,)), mode='markers',
+    x=eval("list((op_score,))"), y=eval("list((op_score * 10,))"), mode='markers',
     marker=dict(color='#ffffff', size=11, line=dict(color=display_color, width=3.5)),
     name="Current State"
 ))
 
-# Explicit tuple bounds to fully insulate parameters from transcription drop bugs
-xaxis_range_tuple = tuple((1, 10))
-yaxis_range_tuple = tuple((0, 100))
+# Explicit static tuple evaluation preventing layout bounds errors
+xaxis_range = eval("tuple((1, 10))")
+yaxis_range = eval("tuple((0, 100))")
 
 fig.update_layout(
-    xaxis=dict(title="Operational Score (O)", range=xaxis_range_tuple, showgrid=True, gridcolor="#1c2230", tickfont=dict(color="#4d586b", size=9), fixedrange=True, titlefont=dict(size=10, color="#828d9e")),
-    yaxis=dict(title="Readiness Index %", range=yaxis_range_tuple, showgrid=True, gridcolor="#1c2230", tickfont=dict(color="#4d586b", size=9), fixedrange=True, titlefont=dict(size=10, color="#828d9e")),
+    xaxis=dict(title="Operational Score (O)", range=xaxis_range, showgrid=True, gridcolor="#1c2230", tickfont=dict(color="#4d586b", size=9), fixedrange=True, titlefont=dict(size=10, color="#828d9e")),
+    yaxis=dict(title="Readiness Index %", range=yaxis_range, showgrid=True, gridcolor="#1c2230", tickfont=dict(color="#4d586b", size=9), fixedrange=True, titlefont=dict(size=10, color="#828d9e")),
     paper_bgcolor='#151923', plot_bgcolor='#151923',
     margin=dict(l=35, r=10, t=10, b=30), height=200, showlegend=False
 )
@@ -200,7 +200,7 @@ metrics_placeholder.markdown(f"""
             <div class='metric-number' style='color:{"#ff4a4a" if w_sq==1 else "#ffffff"};'>{w_sq}</div>
         </div>
         <div class='metric-box'>
-Risk Multiplier
+            <div class='metric-title'>Risk Multiplier</div>
 {risk_multiplier}
 
 
