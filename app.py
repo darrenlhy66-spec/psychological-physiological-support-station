@@ -2,24 +2,16 @@ import streamlit as st
 import numpy as np
 import plotly.graph_objects as go
 
-# ---------------- LAYERED CONFIGURATION INJECTION ----------------
-st.config.set_option("theme.primaryColor", "#00f0ff")
-st.config.set_option("theme.backgroundColor", "#11141d")
-st.config.set_option("theme.secondaryBackgroundColor", "#151923")
-st.config.set_option("theme.textColor", "#f0f2f5")
-
+# Set page structure to wide mode matching your screen proportions
 st.set_page_config(page_title="The Rational Line - Risk Cockpit", layout="wide")
 
-# CSS adjustments to crush horizontal stretching and align text blocks
+# CSS adjustments to force CYAN color overrides and compress layout bounds
 st.markdown("""
     <style>
-    /* Global Canvas styling */
+    /* Global Background Canvas styling */
     .stApp { background-color: #11141d !important; color: #f0f2f5 !important; }
     
-    /* 
-       FORCE VERTICAL PROFILE FRAME 
-       This cuts off the horizontal space and wraps everything tight vertically
-    */
+    /* Strict narrow vertical profile constraint */
     div.stMain,
     div[data-testid="stAppViewMain"],
     div[data-testid="stMainBlockContainer"],
@@ -57,8 +49,31 @@ st.markdown("""
     .slider-lbl { font-size: 13px !important; color: #828d9e !important; font-weight: 400 !important; }
     .slider-val { font-size: 13px !important; color: #00f0ff !important; font-weight: 600 !important; }
     
-    /* Clear native floating label numbers */
+    /* 
+       --- FORCE CYAN OVERRIDES FOR NATIVE STREAMLIT SLIDERS ---
+       This deep-targets the theme variables to sweep away the orange lines
+    */
+    /* Target track fill color highlights */
+    div[data-testid="stSlider"] [style*="background-color: rgb(255, 75, 75)"] {
+        background-color: #00f0ff !important;
+    }
+    div[data-testid="stSlider"] [style*="background: rgb(255, 75, 75)"] {
+        background: #00f0ff !important;
+    }
+    /* Target active line track selections */
+    div[data-testid="stSlider"] [data-baseweb="slider"] > div > div {
+        background-color: #00f0ff !important;
+    }
+    /* Target core handle circles thumb node */
+    div[role="slider"] {
+        background-color: #00f0ff !important;
+        border: 2px solid #ffffff !important;
+        box-shadow: 0 0 8px rgba(0, 240, 255, 0.6) !important;
+    }
+    
+    /* Clear native floating red numeric values labels */
     div[data-testid="stSlider"] [data-testid="stActiveValue"] { display: none !important; opacity: 0 !important; }
+    div[data-testid="stSlider"] div[style*="color: rgb(255, 75, 75)"] { display: none !important; }
     
     /* Global Footer Element Exclusions */
     #MainMenu, footer, header { visibility: hidden; display: none !important; }
@@ -145,7 +160,7 @@ fig.add_trace(go.Scatter(
 
 # Safety boundary guidelines
 fig.add_trace(go.Scatter(
-    x=[4.5, 4.5], y=[0, 100], mode='lines',
+    x=[4.5, 4.5], y=[10, 100], mode='lines',
     line=dict(color='#ff4a4a', width=1, dash='dash'), hoverinfo='skip'
 ))
 
@@ -158,7 +173,7 @@ fig.add_trace(go.Scatter(
 
 fig.update_layout(
     xaxis=dict(title="Calculated Operational Score (O)", range=[1, 10], showgrid=True, gridcolor="#1c2230", tickfont=dict(color="#4d586b", size=10), fixedrange=True),
-    yaxis=dict(title="Readiness Index %", range=[0, 100], showgrid=True, gridcolor="#1c2230", tickfont=dict(color="#4d586b", size=10), fixedrange=True),
+    yaxis=dict(title="Readiness Index %", range=[10, 100], showgrid=True, gridcolor="#1c2230", tickfont=dict(color="#4d586b", size=10), fixedrange=True),
     paper_bgcolor='#151923', plot_bgcolor='#151923',
     margin=dict(l=45, r=15, t=10, b=30), height=230, showlegend=False
 )
@@ -175,18 +190,17 @@ plot_placeholder.plotly_chart(fig, use_container_width=True, config={'displayMod
 
 metrics_placeholder.markdown(f"""
     <div class='metrics-row'>
-        <div class='metric-item'>
-            <div class='metric-label'>Operational Score (O)</div>
-            <div style='font-size:20px; font-weight:600; color:#ffffff;'>{op_score:.2f}</div>
-        </div>
-        <div class='metric-item'>
-            <div class='metric-label'>Sleep Warning (W_sq)</div>
-            <div style='font-size:20px; font-weight:600; color:{"#ff4a4a" if w_sq==1 else "#828d9e"};'>{w_sq}</div>
-        </div>
-        <div class='metric-item'>
-            <div class='metric-label'>Risk Multiplier</div>
-            <div style='font-size:15px; font-weight:600; color:{display_color};'>{risk_multiplier}</div>
-        </div>
-    </div>
+Operational Score (O)
+{op_score:.2f}
+
+
+Sleep Warning (W_sq)
+{w_sq}
+
+
+Risk Multiplier
+{risk_multiplier}
+
+
 """, unsafe_allow_html=True)
 st.markdown("The numerical thresholds above are proposed design settings to test, not clinically or scientifically validated cut-offs.", unsafe_allow_html=True)
