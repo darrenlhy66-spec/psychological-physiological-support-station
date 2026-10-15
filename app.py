@@ -1,9 +1,8 @@
 import streamlit as st
-import numpy as np
-import plotly.graph_objects as go
 
 st.set_page_config(page_title="Impulse Gate Risk Control Station", layout="wide")
 
+# Total styling overrides to preserve vertical compact alignment and cyan accent rails
 st.markdown("""
     <style>
     .stApp { background-color: #11141d !important; color: #f0f2f5 !important; }
@@ -93,7 +92,7 @@ with st.container():
 
     st.markdown("<div class='cockpit-card'>", unsafe_allow_html=True)
     header_placeholder = st.empty()
-    plot_placeholder = st.empty()
+    svg_placeholder = st.empty()
     metrics_placeholder = st.empty()
     st.markdown("</div>", unsafe_allow_html=True)
 
@@ -141,63 +140,64 @@ else:
     risk_multiplier = "100% (Full Size)"
     display_color = "#00c874"
 
-mesh_x = np.linspace(1, 10, 100)
-mesh_y_normalized = mesh_x * 10
+# NATIVE SVG GRAPH VECTOR COMPUTATION (100% Immune to Character Truncation Filters)
+# Map score 1-10 down to vector coordinates inside a 100% width container view
+pct_x = ((op_score - 1.0) / 9.0) * 100.0
+pct_y = 100.0 - (op_score * 10.0)
 
-fig = go.Figure()
-
-fig.add_trace(go.Scatter(
-    x=mesh_x, y=mesh_y_normalized, mode='lines',
-    line=dict(color='#2b5cbe', width=2), hoverinfo='skip'
-))
-
-cluster_x_data = list(map(float, "4.75 4.83 4.90 4.96 5.01 5.10 5.23 4.87 4.94 5.00 5.07 4.78".split()))
-cluster_y_data = list(map(float, "60.8 68.4 57.2 75.6 65.6 46.0 55.2 48.4 62.4 71.2 59.6 64.8".split()))
-
-fig.add_trace(go.Scatter(
-    x=cluster_x_data, y=cluster_y_data, mode='markers',
-    marker=dict(color='#00c874', size=7.5, opacity=0.85), hoverinfo='skip'
-))
-
-gate_x_coords = list(map(float, "4.5 4.5".split()))
-gate_y_coords = list(map(float, "0 100".split()))
-
-fig.add_trace(go.Scatter(
-    x=gate_x_coords, y=gate_y_coords, mode='lines',
-    line=dict(color='#ff4a4a', width=1.5, dash='dash'), hoverinfo='skip'
-))
-
-fig.add_trace(go.Scatter(
-    x=list(map(float, str(op_score).split())), y=list(map(float, str(op_score * 10.0).split())), mode='markers',
-    marker=dict(color='#ffffff', size=11, line=dict(color=display_color, width=3.5)),
-    name="Current Position"
-))
-
-xaxis_range_bounds = list(map(float, "1 10".split()))
-yaxis_range_bounds = list(map(float, "0 100".split()))
-
-fig.update_layout(
-    xaxis=dict(title="Operational Score (O)", range=xaxis_range_bounds, showgrid=True, gridcolor="#1c2230", tickfont=dict(color="#4d586b", size=9), fixedrange=True, titlefont=dict(size=10, color="#828d9e")),
-    yaxis=dict(title="Readiness Index %", range=yaxis_range_bounds, showgrid=True, gridcolor="#1c2230", tickfont=dict(color="#4d586b", size=9), fixedrange=True, titlefont=dict(size=10, color="#828d9e")),
-    paper_bgcolor='#151923', plot_bgcolor='#151923',
-    margin=dict(l=35, r=10, t=10, b=30), height=200, showlegend=False
-)
-
+# Protect the vector layout from collapse by constructing coordinate parameters explicitly
+svg_code = f"""
+<svg viewBox='0 0 400 200' width='100%' height='200' style='background:#151923; overflow:visible;'>
+    <!-- Horizontal Grid ticks background -->
+    <line x1='35' y1='30' x2='385' y2='30' stroke='#1c2230' stroke-width='1' />
+    <line x1='35' y1='70' x2='385' y2='70' stroke='#1c2230' stroke-width='1' />
+    <line x1='35' y1='110' x2='385' y2='110' stroke='#1c2230' stroke-width='1' />
+    <line x1='35' y1='150' x2='385' y2='150' stroke='#1c2230' stroke-width='1' />
+    
+    <!-- Axis numeric labeling blocks -->
+    <text x='5' y='34' fill='#4d586b' font-size='9'>$30k</text>
+    <text x='5' y='74' fill='#4d586b' font-size='9'>$10k</text>
+    <text x='5' y='114' fill='#4d586b' font-size='9'>$-10k</text>
+    <text x='5' y='154' fill='#4d586b' font-size='9'>$-30k</text>
+    
+    <text x='35' y='180' fill='#4d586b' font-size='9'>1</text>
+    <text x='122' y='180' fill='#4d586b' font-size='9'>3</text>
+    <text x='210' y='180' fill='#4d586b' font-size='9'>5</text>
+    <text x='297' y='180' fill='#4d586b' font-size='9'>7</text>
+    <text x='380' y='180' fill='#4d586b' font-size='9'>10</text>
+    
+    <text x='150' y='195' fill='#828d9e' font-size='10'>Operational Score (O)</text>
+    
+    <!-- Vertical Red Hard-Stop Safety Guideline (Tilt Gate) -->
+    <line x1='171' y1='15' x2='171' y2='160' stroke='#d93838' stroke-width='1.5' stroke-dasharray='4,4' />
+    
+    <!-- Multiple Regression Plane Trend Path Line -->
+    <line x1='35' y1='160' x2='385' y2='20' stroke='#2b5cbe' stroke-width='2' />
+    
+    <!-- Historical Optimal green cluster metrics distribution node dots -->
+    <circle cx='180' cy='65' r='3.5' fill='#00c874' opacity='0.8' />
+    <circle cx='195' cy='55' r='3.5' fill='#00c874' opacity='0.8' />
+    <circle cx='210' cy='70' r='3.5' fill='#00c874' opacity='0.8' />
+    <circle cx='225' cy='48' r='3.5' fill='#00c874' opacity='0.8' />
+    <circle cx='240' cy='60' r='3.5' fill='#00c874' opacity='0.8' />
+"""
 header_placeholder.markdown(f"""
-    <div class='chart-header'>
-        <span class='chart-title'>Psychology Multiple Regression Plane</span>
-        {status_html}
-    </div>
+
+Psychology Multiple Regression Plane
+{status_html}
+
 """, unsafe_allow_html=True)
 
-plot_placeholder.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
+Directly inject the fluid SVG into the mobile wrapper element
 
+svg_placeholder.markdown(svg_code, unsafe_allow_html=True)
 metrics_placeholder.markdown(f"""
-    <div class='metrics-row'>
-        <div class='metric-box'>
-            <div class='metric-title'>Operational Score</div>
-            <div class='metric-number'>{op_score:.2f}</div>
-        </div>
+
+
+Operational Score
+{op_score:.2f}
+
+
 Sleep Warning
 {w_sq}
 
