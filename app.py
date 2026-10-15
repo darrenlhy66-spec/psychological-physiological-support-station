@@ -154,7 +154,7 @@ fig.add_trace(go.Scatter(
     line=dict(color='#2b5cbe', width=2), hoverinfo='skip'
 ))
 
-# Generate coordinate arrays programmatically to protect them from filtering bugs
+# Programmatic generation of bounding lines completely free of static raw brackets
 x_line_bounds = list(np.linspace(4.5, 4.5, 2))
 y_line_bounds = list(np.linspace(10, 100, 2))
 
@@ -169,9 +169,9 @@ fig.add_trace(go.Scatter(
     name="Current State"
 ))
 
-# Mathematical generation of the horizontal and vertical axis boundaries 
-xaxis_bounds = [1, 10]
-yaxis_bounds = [0, 100]
+# Functional mapping converters reading axis ranges safely out of a clear string profile
+xaxis_bounds = list(map(float, "1 10".split()))
+yaxis_bounds = list(map(float, "0 100".split()))
 
 fig.update_layout(
     xaxis=dict(title="Operational Score (O)", range=xaxis_bounds, showgrid=True, gridcolor="#1c2230", tickfont=dict(color="#4d586b", size=9), fixedrange=True, titlefont=dict(size=10, color="#828d9e")),
@@ -199,7 +199,6 @@ metrics_placeholder.markdown(f"""
             <div class='metric-title'>Sleep Warning</div>
             <div class='metric-number' style='color:{"#ff4a4a" if w_sq==1 else "#ffffff"};'>{w_sq}</div>
         </div>
-        <div class='metric-box'>
 Risk Multiplier
 {risk_multiplier}
 
