@@ -1,16 +1,20 @@
 import streamlit as st
 import numpy as np
+import plotly.graph_objects as go
 
-# Set page structure to wide mode matching your screen proportions
+# Set page structure to wide mode matching your mobile viewport
 st.set_page_config(page_title="Impulse Gate Risk Control Station", layout="wide")
 
-# CSS adjustments to force mobile responsive fluid scaling, cyan accents, and progress styling
+# Total styling overrides to preserve vertical compact alignment and cyan accent rails
 st.markdown("""
     <style>
     /* Global Background Canvas styling */
     .stApp { background-color: #11141d !important; color: #f0f2f5 !important; }
     
-    /* FORCE VERTICAL PROFILE FRAME */
+    /* 
+       DYNAMIC RESPONSIVE PROFILES 
+       Enforces a compact vertical structure to prevent wide desktop page stretching
+    */
     div.stMain,
     div[data-testid="stAppViewMain"],
     div[data-testid="stMainBlockContainer"],
@@ -29,19 +33,14 @@ st.markdown("""
     .cockpit-card { background-color: #151923 !important; border-radius: 6px !important; padding: 16px !important; margin-bottom: 15px !important; }
     
     /* Header Row Element Alignment */
-    .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-    .chart-title { color: #828d9e !important; font-size: 12px !important; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+    .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .chart-title { color: #828d9e !important; font-size: 12px !important; font-weight: 500; }
     
     /* Strict Color States for Gate Statuses */
     .status-badge { border-radius: 15px; padding: 4px 12px; font-weight: 600; font-size: 10px; text-transform: uppercase; white-space: nowrap; }
     .badge-green { border: 1.2px solid #00c874; color: #00c874; background-color: rgba(0, 200, 116, 0.05); }
     .badge-amber { border: 1.2px solid #ffb000; color: #ffb000; background-color: rgba(255, 176, 0, 0.05); }
     .badge-red { border: 1.2px solid #ff4a4a; color: #ff4a4a; background-color: rgba(255, 74, 74, 0.05); }
-    
-    /* NATIVE PROGRESS TRACK BAR STYLING OVERRIDES */
-    .progress-wrapper { width: 100%; margin: 10px 0 20px 0; }
-    .progress-bar-container { width: 100%; height: 8px; background-color: #1f2633; border-radius: 4px; overflow: hidden; position: relative; }
-    .progress-fill { height: 100%; transition: width 0.1s ease-in-out, background-color 0.1s ease-in-out; }
     
     /* Precision Institutional Alignment for the Wording Row Blocks */
     .metrics-row { 
@@ -83,9 +82,11 @@ st.markdown("""
         box-shadow: 0 0 6px rgba(0, 240, 255, 0.5) !important;
     }
     
+    /* Clear native duplicate floating text labels */
     div[data-testid="stSlider"] [data-testid="stActiveValue"] { display: none !important; opacity: 0 !important; }
     div[data-testid="stSlider"] div[style*="color: rgb(255, 75, 75)"] { display: none !important; }
     
+    /* Responsive screen compressions for mobile devices view */
     @media (max-width: 640px) {
         div.stMain, div[data-testid="stMainBlockContainer"], .main .block-container {
             padding-left: 8px !important;
@@ -106,10 +107,10 @@ with st.container():
     st.markdown("<h1 style='font-size:20px; margin-top: -10px;'>Impulse Gate Risk Control Station</h1>", unsafe_allow_html=True)
     st.markdown("<div class='desc-text' style='color:#8a94a6; font-size:12.5px; margin-bottom:15px; line-height:1.4;'>Layered execution framework treating sleep quality as a baseline risk modifier while tracking live independent behavioral metrics.</div>", unsafe_allow_html=True)
 
-    # Main Dashboard Card Container setup
+    # Main Card container block
     st.markdown("<div class='cockpit-card'>", unsafe_allow_html=True)
     header_placeholder = st.empty()
-    progress_placeholder = st.empty()
+    plot_placeholder = st.empty()
     metrics_placeholder = st.empty()
     st.markdown("</div>", unsafe_allow_html=True)
 
@@ -128,21 +129,24 @@ with st.container():
         slider_e = st.slider("Emotional Intensity", 1.0, 10.0, 1.0, step=1.0, key="sl_e", label_visibility="collapsed")
         st.markdown(f"<div class='slider-row' style='margin-top:-25px; margin-bottom:15px;'><span class='slider-lbl'>Emotional Intensity (E)</span><span class='slider-val'>{int(slider_e)}/10</span></div>", unsafe_allow_html=True)
 
-    with col_right:
+with col_right:
         slider_c = st.slider("Cognitive Fatigue", 1.0, 10.0, 2.0, step=1.0, key="sl_c", label_visibility="collapsed")
         st.markdown(f"<div class='slider-row' style='margin-top:-25px; margin-bottom:15px;'><span class='slider-lbl'>Cognitive Fatigue (C)</span><span class='slider-val'>{int(slider_c)}/10</span></div>", unsafe_allow_html=True)
         
         slider_i = st.slider("Impulse Control", 1.0, 10.0, 6.0, step=1.0, key="sl_i", label_visibility="collapsed")
         st.markdown(f"<div class='slider-row' style='margin-top:-25px; margin-bottom:15px;'><span class='slider-lbl'>Impulse Control (I)</span><span class='slider-val'>{int(slider_i)}/10</span></div>", unsafe_allow_html=True)
 
-# Calculate equations parameters
+# ---------------- THE RATIONAL LINE EVALUATION ENGINE ----------------
+# 1. Layer A Calculation
 w_sq = 1 if slider_sq < 5.0 else 0
+
+# 2. Layer B Operational Formula Matrix
 op_score = (0.30 * slider_f) + (0.25 * (11 - slider_c)) + (0.20 * (11 - slider_e)) + (0.25 * slider_i)
 
 if slider_sq == 6.0 and slider_f == 8.0 and slider_c == 2.0 and slider_e == 1.0 and slider_i == 6.0:
     op_score = 8.15
 
-# Determine system color states and badges
+# 3. Deterministic Gate Condition Matrix
 if (slider_sq < 5.0 or slider_f <= 3.0 or slider_i <= 3.0 or slider_e >= 9.0 or slider_c >= 9.0):
     status_html = "<div class='status-badge badge-red'>RED — Stand Down</div>"
     risk_multiplier = "0% (Blocked)"
@@ -160,35 +164,76 @@ else:
     risk_multiplier = "100% (Full Size)"
     display_color = "#00c874"
 
-# Compute percentage calculation mapping targets footprints (scaled 1-10 to 0-100%)
-progress_pct = float(op_score * 10.0)
+# ---------------- GRAPH CANVAS DRAW DATA MODULES ----------------
+# Programmatic sequence generators to bypass bracket filtering errors completely
+mesh_x = np.linspace(1, 10, 100)
+mesh_y = 19.3 - (0.0932 * (mesh_x * 10))
 
-# Render Header Row Block element parameters
+# Recalculate original template returns trajectory equation tracking mapping slope lines
+mesh_y_normalized = mesh_x * 10
+
+fig = go.Figure()
+
+# 1. Trend regression tracking line path
+fig.add_trace(go.Scatter(
+    x=mesh_x, y=mesh_y_normalized, mode='lines',
+    line=dict(color='#2b5cbe', width=2), hoverinfo='skip'
+))
+
+# 2. Original green historical cluster nodes distribution anchors
+cluster_x_data = list(map(float, "4.75 4.83 4.90 4.96 5.01 5.10 5.23 4.87 4.94 5.00 5.07 4.78".split()))
+cluster_y_data = list(map(float, "60.8 68.4 57.2 75.6 65.6 46.0 55.2 48.4 62.4 71.2 59.6 64.8".split()))
+
+fig.add_trace(go.Scatter(
+    x=cluster_x_data, y=cluster_y_data, mode='markers',
+    marker=dict(color='#00c874', size=7.5, opacity=0.85), hoverinfo='skip'
+))
+
+# 3. Vertical Red Safety Boundary Dotted Gate Guidelines
+gate_x_coords = list(map(float, "4.5 4.5".split()))
+gate_y_coords = list(map(float, "0 100".split()))
+
+fig.add_trace(go.Scatter(
+    x=gate_x_coords, y=gate_y_coords, mode='lines',
+line=dict(color='#ff4a4a', width=1.5, dash='dash'), hoverinfo='skip'
+))
+
+4. Interactive Live State Tracking node marker (White Dot with state-color ring)
+
+fig.add_trace(go.Scatter(
+x=list(map(float, str(op_score).split())), y=list(map(float, str(op_score * 10.0).split())), mode='markers',
+marker=dict(color='#ffffff', size=11, line=dict(color=display_color, width=3.5)),
+name="Current Position"
+))
+
+Insulate chart limits safely from markdown string filters using programmatic lists
+
+xaxis_range_bounds = list(map(float, "1 10".split()))
+yaxis_range_bounds = list(map(float, "0 100".split()))
+fig.update_layout(
+xaxis=dict(title="Operational Score (O)", range=xaxis_range_bounds, showgrid=True, gridcolor="#1c2230", tickfont=dict(color="#4d586b", size=9), fixedrange=True, titlefont=dict(size=10, color="#828d9e")),
+yaxis=dict(title="Readiness Index %", range=yaxis_range_bounds, showgrid=True, gridcolor="#1c2230", tickfont=dict(color="#4d586b", size=9), fixedrange=True, titlefont=dict(size=10, color="#828d9e")),
+paper_bgcolor='#151923', plot_bgcolor='#151923',
+margin=dict(l=35, r=10, t=10, b=30), height=210, showlegend=False
+)
+
+---------------- CONTAINER RENDERING PUSHES ----------------
+
 header_placeholder.markdown(f"""
-    <div class='chart-header'>
-        <span class='chart-title'>Operational Readiness Track</span>
-        {status_html}
-    </div>
-""", unsafe_allow_html=True)
 
-# Render the Standalone Responsive Vector Progress Track Bar (100% immune to text drops)
-progress_placeholder.markdown(f"""
-    <div class='progress-wrapper'>
-        <div class='progress-bar-container'>
-            <div class='progress-fill' style='width: {progress_pct}%; background-color: {display_color}; box-shadow: 0 0 8px {display_color}80;'></div>
-        </div>
-    </div>
-""", unsafe_allow_html=True)
+Psychology Multiple Regression Plane
+{status_html}
 
-# Render formatted text blocks fields components 
+""", unsafe_allow_html=True)
+plot_placeholder.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
 metrics_placeholder.markdown(f"""
-    <div class='metrics-row'>
-        <div class='metric-box'>
-            <div class='metric-title'>Operational Score</div>
-            <div class='metric-number'>{op_score:.2f}</div>
-        </div>
-        <div class='metric-box'>
-            <div class='metric-title'>Sleep Warning</div>
+
+
+Operational Score
+{op_score:.2f}
+
+
+Sleep Warning
 {w_sq}
 
 
