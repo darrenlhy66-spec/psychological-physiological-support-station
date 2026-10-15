@@ -3,15 +3,18 @@ import numpy as np
 import plotly.graph_objects as go
 
 # Set page structure to wide mode matching your screen proportions
-st.set_page_config(page_title="The Rational Line - Risk Cockpit", layout="wide")
+st.set_page_config(page_title="Impulse Gate Risk Control Station", layout="wide")
 
-# CSS adjustments to force CYAN color overrides and compress layout bounds
+# CSS adjustments to force CYAN color overrides, fix metrics text alignment, and compress layout bounds
 st.markdown("""
     <style>
     /* Global Background Canvas styling */
     .stApp { background-color: #11141d !important; color: #f0f2f5 !important; }
     
-    /* Strict narrow vertical profile constraint */
+    /* 
+       FORCE VERTICAL PROFILE FRAME 
+       Locks the grid system wrapper into a clean, un-stretched vertical block
+    */
     div.stMain,
     div[data-testid="stAppViewMain"],
     div[data-testid="stMainBlockContainer"],
@@ -39,32 +42,41 @@ st.markdown("""
     .badge-amber { border: 1.2px solid #ffb000; color: #ffb000; background-color: rgba(255, 176, 0, 0.05); }
     .badge-red { border: 1.2px solid #ff4a4a; color: #ff4a4a; background-color: rgba(255, 74, 74, 0.05); }
     
-    /* Three Column Inline Callout Blocks Layout */
-    .metrics-row { display: flex; justify-content: space-around; align-items: center; padding-top: 20px; margin-top: 15px; border-top: 1px solid #1e2330; text-align: center; }
-    .metric-item { flex: 1; }
-    .metric-label { font-size: 11px !important; color: #788596 !important; margin-bottom: 5px; }
+    /* Precision Institutional Alignment for the Wording Row Blocks */
+    .metrics-row { 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: flex-start; 
+        padding-top: 20px; 
+        margin-top: 15px; 
+        border-top: 1px solid #1e2330; 
+    }
+    .metric-box { 
+        flex: 1; 
+        text-align: center; 
+        padding: 0 5px;
+    }
+    .metric-title { 
+        font-size: 11px !important; 
+        color: #788596 !important; 
+        margin-bottom: 8px; 
+        white-space: nowrap;
+    }
+    .metric-number { 
+        font-size: 20px !important; 
+        font-weight: 600 !important; 
+        color: #ffffff !important; 
+    }
     
     /* Custom Inline Sliders typography tags formatting placement */
     .slider-row { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: -5px; margin-top: 8px; }
     .slider-lbl { font-size: 13px !important; color: #828d9e !important; font-weight: 400 !important; }
     .slider-val { font-size: 13px !important; color: #00f0ff !important; font-weight: 600 !important; }
     
-    /* 
-       --- FORCE CYAN OVERRIDES FOR NATIVE STREAMLIT SLIDERS ---
-       This deep-targets the theme variables to sweep away the orange lines
-    */
-    /* Target track fill color highlights */
-    div[data-testid="stSlider"] [style*="background-color: rgb(255, 75, 75)"] {
-        background-color: #00f0ff !important;
-    }
-    div[data-testid="stSlider"] [style*="background: rgb(255, 75, 75)"] {
-        background: #00f0ff !important;
-    }
-    /* Target active line track selections */
-    div[data-testid="stSlider"] [data-baseweb="slider"] > div > div {
-        background-color: #00f0ff !important;
-    }
-    /* Target core handle circles thumb node */
+    /* --- CYAN OVERRIDES FOR NATIVE STREAMLIT SLIDERS --- */
+    div[data-testid="stSlider"] [style*="background-color: rgb(255, 75, 75)"] { background-color: #00f0ff !important; }
+    div[data-testid="stSlider"] [style*="background: rgb(255, 75, 75)"] { background: #00f0ff !important; }
+    div[data-testid="stSlider"] [data-baseweb="slider"] > div > div { background-color: #00f0ff !important; }
     div[role="slider"] {
         background-color: #00f0ff !important;
         border: 2px solid #ffffff !important;
@@ -82,7 +94,7 @@ st.markdown("""
 
 # Wrap everything into a tight vertical frame container
 with st.container():
-    st.markdown("<h1 style='font-size:20px; margin-top: -10px;'>The Rational Line: State Dashboard</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='font-size:20px; margin-top: -10px;'>Impulse Gate Risk Control Station</h1>", unsafe_allow_html=True)
     st.markdown("<div style='color:#8a94a6; font-size:13px; margin-bottom:20px; line-height:1.4;'>Layered execution framework treating sleep quality as a baseline risk modifier while tracking live independent behavioral metrics.</div>", unsafe_allow_html=True)
 
     # Main Dashboard Card Container
@@ -119,14 +131,12 @@ with st.container():
 w_sq = 1 if slider_sq < 5.0 else 0
 
 # 2. Layer B: Process Operational Score Formula
-# O = 0.30F + 0.25(11-C) + 0.20(11-E) + 0.25I
 op_score = (0.30 * slider_f) + (0.25 * (11 - slider_c)) + (0.20 * (11 - slider_e)) + (0.25 * slider_i)
 
-# Override default startup configurations to anchor at exact image values cleanly
 if slider_sq == 6.0 and slider_f == 8.0 and slider_c == 2.0 and slider_e == 1.0 and slider_i == 6.0:
     op_score = 8.15
 
-# 3. Rule Sorting Engine Matrix (Hard-Stop Gates Overriding State Averages)
+# 3. Rule Sorting Engine Matrix
 if (slider_sq < 5.0 or slider_f <= 3.0 or slider_i <= 3.0 or slider_e >= 9.0 or slider_c >= 9.0):
     gate_state = "RED"
     status_html = "<div class='status-badge badge-red'>RED — Stand Down</div>"
@@ -158,13 +168,11 @@ fig.add_trace(go.Scatter(
     line=dict(color='#2b5cbe', width=2), hoverinfo='skip'
 ))
 
-# Safety boundary guidelines
 fig.add_trace(go.Scatter(
-    x=[4.5, 4.5], y=[10, 100], mode='lines',
+    x=[4.5, 4.5], y=[0, 100], mode='lines',
     line=dict(color='#ff4a4a', width=1, dash='dash'), hoverinfo='skip'
 ))
 
-# Plot Active Intersection Node
 fig.add_trace(go.Scatter(
     x=[op_score], y=[op_score * 10], mode='markers',
     marker=dict(color='#ffffff', size=11, line=dict(color=display_color, width=3.5)),
@@ -173,7 +181,7 @@ fig.add_trace(go.Scatter(
 
 fig.update_layout(
     xaxis=dict(title="Calculated Operational Score (O)", range=[1, 10], showgrid=True, gridcolor="#1c2230", tickfont=dict(color="#4d586b", size=10), fixedrange=True),
-    yaxis=dict(title="Readiness Index %", range=[10, 100], showgrid=True, gridcolor="#1c2230", tickfont=dict(color="#4d586b", size=10), fixedrange=True),
+    yaxis=dict(title="Readiness Index %", range=[0, 100], showgrid=True, gridcolor="#1c2230", tickfont=dict(color="#4d586b", size=10), fixedrange=True),
     paper_bgcolor='#151923', plot_bgcolor='#151923',
     margin=dict(l=45, r=15, t=10, b=30), height=230, showlegend=False
 )
@@ -188,6 +196,7 @@ header_placeholder.markdown(f"""
 
 plot_placeholder.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
 
+# Clean, structured vertical column text boxes alignment mapping
 metrics_placeholder.markdown(f"""
     <div class='metrics-row'>
 Operational Score (O)
