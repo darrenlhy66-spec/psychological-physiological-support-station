@@ -114,7 +114,7 @@ st.markdown("""
 
 with st.container():
     # Rebranded Title Target Header
-    st.markdown("<h1 style='font-size:19px; margin-top: -10px; font-weight:600;'>psychological-physiological support station</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='font-size:19px; margin-top: -10px; font-weight:600;'>Psychological-Physiological Support Station</h1>", unsafe_allow_html=True)
     st.markdown("<div class='desc-text' style='color:#8a94a6; font-size:12.5px; margin-bottom:15px; line-height:1.4;'>Layered execution framework treating sleep quality as a baseline risk modifier while tracking live independent behavioral metrics.</div>", unsafe_allow_html=True)
 
     st.markdown("<div class='cockpit-card'>", unsafe_allow_html=True)
