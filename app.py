@@ -9,7 +9,7 @@ st.config.set_option("theme.secondaryBackgroundColor", "#151923")
 st.config.set_option("theme.textColor", "#f0f2f5")
 
 # Set page structure to wide mode matching your smartphone viewport proportions
-st.set_page_config(page_title="psychological-physiological support station", layout="wide")
+st.set_page_config(page_title="Psychological-Physiological Support Station", layout="wide")
 
 # CSS adjustments to force mobile responsive fluid scaling and clean custom dark typography layout cards
 st.markdown("""
