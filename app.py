@@ -1,12 +1,26 @@
 import streamlit as st
 import numpy as np
 
-st.set_page_config(page_title="Impulse Gate Risk Control Station", layout="wide")
+# --- IMMUNE CONFIGURATION INJECTIONS ---
+# Forces the theme pipeline to hard-lock cyan variables globally across all server refreshes
+st.config.set_option("theme.primaryColor", "#00f0ff")
+st.config.set_option("theme.backgroundColor", "#11141d")
+st.config.set_option("theme.secondaryBackgroundColor", "#151923")
+st.config.set_option("theme.textColor", "#f0f2f5")
 
+# Set page structure to wide mode matching your smartphone viewport proportions
+st.set_page_config(page_title="psychological-physiological support station", layout="wide")
+
+# CSS adjustments to force mobile responsive fluid scaling and clean custom dark typography layout cards
 st.markdown("""
     <style>
+    /* Global Background Canvas styling */
     .stApp { background-color: #11141d !important; color: #f0f2f5 !important; }
     
+    /* 
+       DYNAMIC RESPONSIVE PROFILES 
+       Enforces a compact vertical structure to prevent wide desktop page stretching
+    */
     div.stMain,
     div[data-testid="stAppViewMain"],
     div[data-testid="stMainBlockContainer"],
@@ -21,15 +35,20 @@ st.markdown("""
         padding-top: 1.0rem !important;
     }
     
+    /* Master Card Element Background Wrapper */
     .cockpit-card { background-color: #151923 !important; border-radius: 6px !important; padding: 16px !important; margin-bottom: 15px !important; }
+    
+    /* Header Row Element Alignment */
     .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
     .chart-title { color: #828d9e !important; font-size: 12px !important; font-weight: 500; }
     
+    /* Strict Color States for Gate Statuses */
     .status-badge { border-radius: 15px; padding: 4px 12px; font-weight: 600; font-size: 10px; text-transform: uppercase; white-space: nowrap; }
     .badge-green { border: 1.2px solid #00c874; color: #00c874; background-color: rgba(0, 200, 116, 0.05); }
     .badge-amber { border: 1.2px solid #ffb000; color: #ffb000; background-color: rgba(255, 176, 0, 0.05); }
     .badge-red { border: 1.2px solid #ff4a4a; color: #ff4a4a; background-color: rgba(255, 74, 74, 0.05); }
     
+    /* Precision Institutional Alignment for the Wording Row Blocks */
     .metrics-row { 
         display: flex; 
         justify-content: space-between; 
@@ -54,12 +73,17 @@ st.markdown("""
         color: #ffffff !important; 
     }
     
+    /* Custom Inline Sliders typography tags formatting placement */
     .slider-row { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: -5px; margin-top: 8px; }
     .slider-lbl { font-size: 12.5px !important; color: #828d9e !important; font-weight: 400 !important; }
     .slider-val { font-size: 12.5px !important; color: #00f0ff !important; font-weight: 600 !important; }
     
-    div[data-testid="stSlider"] [style*="background-color: rgb(255, 75, 75)"] { background-color: #00f0ff !important; }
-    div[data-testid="stSlider"] [style*="background: rgb(255, 75, 75)"] { background: #00f0ff !important; }
+    /* 
+       --- PERMANENT HARD-CODED CYAN ACCENT RAILS ---
+       Overwrites browser base settings to keep track bars cyan indefinitely
+    */
+    div[data-testid="stSlider"] [style*="background-color"] { background-color: #00f0ff !important; }
+    div[data-testid="stSlider"] [style*="background:"] { background: #00f0ff !important; }
     div[data-testid="stSlider"] [data-baseweb="slider"] > div > div { background-color: #00f0ff !important; }
     div[role="slider"] {
         background-color: #00f0ff !important;
@@ -67,9 +91,11 @@ st.markdown("""
         box-shadow: 0 0 6px rgba(0, 240, 255, 0.5) !important;
     }
     
+    /* Clear duplicate floating text label overlays */
     div[data-testid="stSlider"] [data-testid="stActiveValue"] { display: none !important; opacity: 0 !important; }
     div[data-testid="stSlider"] div[style*="color: rgb(255, 75, 75)"] { display: none !important; }
     
+    /* Responsive screen fluid compression metrics rules */
     @media (max-width: 640px) {
         div.stMain, div[data-testid="stMainBlockContainer"], .main .block-container {
             padding-left: 8px !important;
@@ -79,7 +105,7 @@ st.markdown("""
         .metric-number { font-size: 15px !important; }
         .metric-title { font-size: 9.5px !important; }
         .slider-lbl, .slider-val { font-size: 12px !important; }
-        h1 { font-size: 18px !important; }
+        h1 { font-size: 16px !important; }
     }
 
     #MainMenu, footer, header { visibility: hidden; display: none !important; }
@@ -87,7 +113,8 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 with st.container():
-    st.markdown("<h1 style='font-size:20px; margin-top: -10px;'>Impulse Gate Risk Control Station</h1>", unsafe_allow_html=True)
+    # Rebranded Title Target Header
+    st.markdown("<h1 style='font-size:19px; margin-top: -10px; font-weight:600;'>psychological-physiological support station</h1>", unsafe_allow_html=True)
     st.markdown("<div class='desc-text' style='color:#8a94a6; font-size:12.5px; margin-bottom:15px; line-height:1.4;'>Layered execution framework treating sleep quality as a baseline risk modifier while tracking live independent behavioral metrics.</div>", unsafe_allow_html=True)
 
     st.markdown("<div class='cockpit-card'>", unsafe_allow_html=True)
@@ -157,34 +184,21 @@ svg_code = f"""
     <text x='210' y='180' fill='#4d586b' font-size='9'>5</text>
     <text x='297' y='180' fill='#4d586b' font-size='9'>7</text>
     <text x='380' y='180' fill='#4d586b' font-size='9'>10</text>
-    <text x='150' y='195' fill='#828d9e' font-size='10'>Operational Score (O)</text>
-    <line x1='171' y1='15' x2='171' y2='160' stroke='#d93838' stroke-width='1.5' stroke-dasharray='4,4' />
-    <line x1='35' y1='160' x2='385' y2='20' stroke='#2b5cbe' stroke-width='2' />
-    <circle cx='180' cy='65' r='3.5' fill='#00c874' opacity='0.8' />
-    <circle cx='195' cy='55' r='3.5' fill='#00c874' opacity='0.8' />
-    <circle cx='210' cy='70' r='3.5' fill='#00c874' opacity='0.8' />
-    <circle cx='225' cy='48' r='3.5' fill='#00c874' opacity='0.8' />
-    <circle cx='240' cy='60' r='3.5' fill='#00c874' opacity='0.8' />
-    <circle cx='{35 + (pct_x * 3.5)}' cy='{160 - (pct_x * 1.4)}' r='5.5' fill='#ffffff' stroke='{display_color}' stroke-width='3.5' />
-</svg>
 """
-
 header_placeholder.markdown(f"""
-    <div class='chart-header'>
-        <span class='chart-title'>Psychology Multiple Regression Plane</span>
-        {status_html}
-    </div>
+
+Psychology Multiple Regression Plane
+{status_html}
+
 """, unsafe_allow_html=True)
-
 svg_placeholder.markdown(svg_code, unsafe_allow_html=True)
-
 metrics_placeholder.markdown(f"""
-    <div class='metrics-row'>
-        <div class='metric-box'>
-            <div class='metric-title'>Operational Score</div>
-            <div class='metric-number'>{op_score:.2f}</div>
-        </div>
-        <div class='metric-box'>
+
+
+Operational Score
+{op_score:.2f}
+
+
 Sleep Warning
 {w_sq}
 
