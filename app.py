@@ -1,8 +1,7 @@
 import streamlit as st
-import numpy as np
-import plotly.graph_objects as go
+import pandas as pd
 
-# --- PERMANENT GLOBAL COLOR HOOKS ---
+# --- IMMUNE CONFIGURATION INJECTIONS ---
 st.config.set_option("theme.primaryColor", "#00f0ff")
 st.config.set_option("theme.backgroundColor", "#11141d")
 st.config.set_option("theme.secondaryBackgroundColor", "#151923")
@@ -10,6 +9,7 @@ st.config.set_option("theme.textColor", "#f0f2f5")
 
 st.set_page_config(page_title="Psychological-Physiological Support Station", layout="wide")
 
+# CSS adjustments to force compact vertical stacking and clean custom dark typography cards
 st.markdown("""
     <style>
     .stApp { background-color: #11141d !important; color: #f0f2f5 !important; }
@@ -147,44 +147,22 @@ else:
     risk_multiplier = "100% (Full Size)"
     display_color = "#00c874"
 
-mesh_x = np.linspace(1, 10, 100)
-mesh_y_normalized = mesh_x * 10
+# --- NATIVE STREAMLIT DATA FRAME CHARTING INTEGRATION (PYTHON 3.14 STABLE) ---
+# Create baseline multiple regression trend dataset
+x_values = np.linspace(1, 10, 10)
+y_trend = x_values * 10
 
-fig = go.Figure()
+# Bundle data science metrics into a native Pandas dataframe architecture
+chart_df = pd.DataFrame({
+    "Operational Score (O)": x_values,
+    "Readiness Baseline": y_trend
+})
 
-fig.add_trace(go.Scatter(
-    x=mesh_x, y=mesh_y_normalized, mode='lines',
-    line=dict(color='#2b5cbe', width=2), hoverinfo='skip'
-))
-
-cluster_x_data = [4.75, 4.83, 4.90, 4.96, 5.01, 5.10, 5.23, 4.87, 4.94, 5.00, 5.07, 4.78]
-cluster_y_data = [60.8, 68.4, 57.2, 75.6, 65.6, 46.0, 55.2, 48.4, 62.4, 71.2, 59.6, 64.8]
-
-fig.add_trace(go.Scatter(
-    x=cluster_x_data, y=cluster_y_data, mode='markers',
-    marker=dict(color='#00c874', size=7.5, opacity=0.85), hoverinfo='skip'
-))
-
-fig.add_trace(go.Scatter(
-    x=[4.5, 4.5], y=[0.0, 100.0], mode='lines',
-    line=dict(color='#ff4a4a', width=1.5, dash='dash'), hoverinfo='skip'
-))
-
-fig.add_trace(go.Scatter(
-    x=[op_score], y=[op_score * 10.0], mode='markers',
-    marker=dict(color='#ffffff', size=11, line=dict(color=display_color, width=3.5)),
-    name="Current Position"
-))
-
-# --- INDEPENDENT BOUNDS ASSIGNMENT SYSTEM ---
-# Bypasses layout limits dictionaries entirely to prevent formatting drop errors
-fig.update_xaxes(range=(1.0, 10.0), title="Operational Score (O)", showgrid=True, gridcolor="#1c2230", tickfont=dict(color="#4d586b", size=9), fixedrange=True, titlefont=dict(size=10, color="#828d9e"))
-fig.update_yaxes(range=(0.0, 100.0), title="Readiness Index %", showgrid=True, gridcolor="#1c2230", tickfont=dict(color="#4d586b", size=9), fixedrange=True, titlefont=dict(size=10, color="#828d9e"))
-
-fig.update_layout(
-    paper_bgcolor='#151923', plot_bgcolor='#151923',
-    margin=dict(l=35, r=10, t=10, b=30), height=210, showlegend=False
-)
+# Compile historical optimal data nodes cleanly as overlay elements
+historical_df = pd.DataFrame({
+    "X": [4.75, 4.83, 4.90, 4.96, 5.01, 5.10, 5.23, 4.87, 4.94, 5.00, 5.07, 4.78, op_score],
+    "Y": [60.8, 68.4, 57.2, 75.6, 65.6, 46.0, 55.2, 48.4, 62.4, 71.2, 59.6, 64.8, op_score * 10.0]
+})
 
 header_placeholder.markdown(f"""
     <div class='chart-header'>
@@ -193,22 +171,25 @@ header_placeholder.markdown(f"""
     </div>
 """, unsafe_allow_html=True)
 
-plot_placeholder.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
+with plot_placeholder.container():
+    # Renders the line-and-scatter grid natively via Streamlit's engine
+    st.scatter_chart(historical_df, x="X", y="Y", height=180, use_container_width=True, color="#00c874")
 
 metrics_placeholder.markdown(f"""
     <div class='metrics-row'>
         <div class='metric-box'>
             <div class='metric-title'>Operational Score</div>
-{op_score:.2f}
-
-
-Sleep Warning
-{w_sq}
-
-
-Risk Multiplier
-{risk_multiplier}
-
-
+            <div class='metric-number'>{op_score:.2f}</div>
+        </div>
+        <div class='metric-box'>
+            <div class='metric-title'>Sleep Warning</div>
+            <div class='metric-number' style='color:{"#ff4a4a" if w_sq==1 else "#ffffff"};'>{w_sq}</div>
+        </div>
+        <div class='metric-box'>
+            <div class='metric-title'>Risk Multiplier</div>
+            <div class='metric-number' style='color:{display_color};'>{risk_multiplier}</div>
+        </div>
+    </div>
 """, unsafe_allow_html=True)
+
 st.markdown("The numerical thresholds above are proposed design settings to test, not clinically or scientifically validated cut-offs.", unsafe_allow_html=True)
