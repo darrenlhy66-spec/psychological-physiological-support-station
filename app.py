@@ -1,7 +1,8 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
 
-# --- IMMUNE CONFIGURATION INJECTIONS ---
+# --- PERMANENT CONFIGURATION HARD-LOCKS ---
 st.config.set_option("theme.primaryColor", "#00f0ff")
 st.config.set_option("theme.backgroundColor", "#11141d")
 st.config.set_option("theme.secondaryBackgroundColor", "#151923")
@@ -9,7 +10,7 @@ st.config.set_option("theme.textColor", "#f0f2f5")
 
 st.set_page_config(page_title="Psychological-Physiological Support Station", layout="wide")
 
-# CSS adjustments to force compact vertical stacking and clean custom dark typography cards
+# CSS adjustments to force horizontal scaling constraints and custom dark metric blocks
 st.markdown("""
     <style>
     .stApp { background-color: #11141d !important; color: #f0f2f5 !important; }
@@ -147,21 +148,11 @@ else:
     risk_multiplier = "100% (Full Size)"
     display_color = "#00c874"
 
-# --- NATIVE STREAMLIT DATA FRAME CHARTING INTEGRATION (PYTHON 3.14 STABLE) ---
-# Create baseline multiple regression trend dataset
-x_values = np.linspace(1, 10, 10)
-y_trend = x_values * 10
-
-# Bundle data science metrics into a native Pandas dataframe architecture
-chart_df = pd.DataFrame({
-    "Operational Score (O)": x_values,
-    "Readiness Baseline": y_trend
-})
-
-# Compile historical optimal data nodes cleanly as overlay elements
+# --- STATIC PRIMITIVE DATA SCATTER (IMMUNE TO TRANSCRIPTION PARSING BLOCKS) ---
+# Compiles historical database anchors and current marker directly inside a stable Dataframe
 historical_df = pd.DataFrame({
-    "X": [4.75, 4.83, 4.90, 4.96, 5.01, 5.10, 5.23, 4.87, 4.94, 5.00, 5.07, 4.78, op_score],
-    "Y": [60.8, 68.4, 57.2, 75.6, 65.6, 46.0, 55.2, 48.4, 62.4, 71.2, 59.6, 64.8, op_score * 10.0]
+    "Operational Score (O)": [4.75, 4.83, 4.90, 4.96, 5.01, 5.10, 5.23, 4.87, 4.94, 5.00, 5.07, 4.78, op_score],
+    "Readiness Index %": [60.8, 68.4, 57.2, 75.6, 65.6, 46.0, 55.2, 48.4, 62.4, 71.2, 59.6, 64.8, op_score * 10.0]
 })
 
 header_placeholder.markdown(f"""
@@ -172,8 +163,14 @@ header_placeholder.markdown(f"""
 """, unsafe_allow_html=True)
 
 with plot_placeholder.container():
-    # Renders the line-and-scatter grid natively via Streamlit's engine
-    st.scatter_chart(historical_df, x="X", y="Y", height=180, use_container_width=True, color="#00c874")
+    # Plots natively using the pre-compiled native engine
+    st.scatter_chart(
+        historical_df, 
+        x="Operational Score (O)", 
+        y="Readiness Index %", 
+        height=200, 
+        use_container_width=True
+    )
 
 metrics_placeholder.markdown(f"""
     <div class='metrics-row'>
@@ -192,4 +189,4 @@ metrics_placeholder.markdown(f"""
     </div>
 """, unsafe_allow_html=True)
 
-st.markdown("The numerical thresholds above are proposed design settings to test, not clinically or scientifically validated cut-offs.", unsafe_allow_html=True)
+st.markdown("<div style='color: #485264; font-size: 10px; margin-top:-5px; font-weight:400; padding-left:5px;'>The numerical thresholds above are proposed design settings to test, not clinically or scientifically validated cut-offs.</div>", unsafe_allow_html=True)
