@@ -2,25 +2,18 @@ import streamlit as st
 import numpy as np
 import plotly.graph_objects as go
 
-# --- IMMUNE CONFIGURATION INJECTIONS ---
+# --- PERMANENT GLOBAL COLOR HOOKS ---
 st.config.set_option("theme.primaryColor", "#00f0ff")
 st.config.set_option("theme.backgroundColor", "#11141d")
 st.config.set_option("theme.secondaryBackgroundColor", "#151923")
 st.config.set_option("theme.textColor", "#f0f2f5")
 
-# Set page structure to wide mode matching your smartphone viewport proportions
 st.set_page_config(page_title="Psychological-Physiological Support Station", layout="wide")
 
-# CSS adjustments to force mobile responsive fluid scaling and clean custom dark typography layout cards
 st.markdown("""
     <style>
-    /* Global Background Canvas styling */
     .stApp { background-color: #11141d !important; color: #f0f2f5 !important; }
     
-    /* 
-       DYNAMIC RESPONSIVE PROFILES 
-       Enforces a compact vertical structure to prevent wide desktop page stretching
-    */
     div.stMain,
     div[data-testid="stAppViewMain"],
     div[data-testid="stMainBlockContainer"],
@@ -35,20 +28,15 @@ st.markdown("""
         padding-top: 1.0rem !important;
     }
     
-    /* Master Card Element Background Wrapper */
     .cockpit-card { background-color: #151923 !important; border-radius: 6px !important; padding: 16px !important; margin-bottom: 15px !important; }
-    
-    /* Header Row Element Alignment */
     .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
     .chart-title { color: #828d9e !important; font-size: 12px !important; font-weight: 500; }
     
-    /* Strict Color States for Gate Statuses */
     .status-badge { border-radius: 15px; padding: 4px 12px; font-weight: 600; font-size: 10px; text-transform: uppercase; white-space: nowrap; }
     .badge-green { border: 1.2px solid #00c874; color: #00c874; background-color: rgba(0, 200, 116, 0.05); }
     .badge-amber { border: 1.2px solid #ffb000; color: #ffb000; background-color: rgba(255, 176, 0, 0.05); }
     .badge-red { border: 1.2px solid #ff4a4a; color: #ff4a4a; background-color: rgba(255, 74, 74, 0.05); }
     
-    /* Precision Institutional Alignment for the Wording Row Blocks */
     .metrics-row { 
         display: flex; 
         justify-content: space-between; 
@@ -73,12 +61,10 @@ st.markdown("""
         color: #ffffff !important; 
     }
     
-    /* Custom Inline Sliders typography tags formatting placement */
     .slider-row { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: -5px; margin-top: 8px; }
     .slider-lbl { font-size: 12.5px !important; color: #828d9e !important; font-weight: 400 !important; }
     .slider-val { font-size: 12.5px !important; color: #00f0ff !important; font-weight: 600 !important; }
     
-    /* --- PERMANENT HARD-CODED CYAN ACCENT RAILS --- */
     div[data-testid="stSlider"] [style*="background-color"] { background-color: #00f0ff !important; }
     div[data-testid="stSlider"] [style*="background:"] { background: #00f0ff !important; }
     div[data-testid="stSlider"] [data-baseweb="slider"] > div > div { background-color: #00f0ff !important; }
@@ -88,11 +74,9 @@ st.markdown("""
         box-shadow: 0 0 6px rgba(0, 240, 255, 0.5) !important;
     }
     
-    /* Clear duplicate floating text label overlays */
     div[data-testid="stSlider"] [data-testid="stActiveValue"] { display: none !important; opacity: 0 !important; }
     div[data-testid="stSlider"] div[style*="color: rgb(255, 75, 75)"] { display: none !important; }
     
-    /* Responsive screen fluid compression metrics rules */
     @media (max-width: 640px) {
         div.stMain, div[data-testid="stMainBlockContainer"], .main .block-container {
             padding-left: 8px !important;
@@ -163,19 +147,16 @@ else:
     risk_multiplier = "100% (Full Size)"
     display_color = "#00c874"
 
-# --- HIGH STABILITY PLOT INTEGRATION ---
 mesh_x = np.linspace(1, 10, 100)
 mesh_y_normalized = mesh_x * 10
 
 fig = go.Figure()
 
-# 1. Linear Slope Line
 fig.add_trace(go.Scatter(
     x=mesh_x, y=mesh_y_normalized, mode='lines',
     line=dict(color='#2b5cbe', width=2), hoverinfo='skip'
 ))
 
-# 2. Historical Cluster Anchor Dots
 cluster_x_data = [4.75, 4.83, 4.90, 4.96, 5.01, 5.10, 5.23, 4.87, 4.94, 5.00, 5.07, 4.78]
 cluster_y_data = [60.8, 68.4, 57.2, 75.6, 65.6, 46.0, 55.2, 48.4, 62.4, 71.2, 59.6, 64.8]
 
@@ -184,39 +165,40 @@ fig.add_trace(go.Scatter(
     marker=dict(color='#00c874', size=7.5, opacity=0.85), hoverinfo='skip'
 ))
 
-# 3. Vertical Red Dashed Safety Gates
 fig.add_trace(go.Scatter(
-    x=[4.5, 4.5], y=[0, 100], mode='lines',
+    x=[4.5, 4.5], y=[0.0, 100.0], mode='lines',
     line=dict(color='#ff4a4a', width=1.5, dash='dash'), hoverinfo='skip'
 ))
 
-# 4. Live Position White Dot Tracker
 fig.add_trace(go.Scatter(
     x=[op_score], y=[op_score * 10.0], mode='markers',
     marker=dict(color='#ffffff', size=11, line=dict(color=display_color, width=3.5)),
     name="Current Position"
 ))
 
-# Math array constructors protecting bounds from character stripping bugs
-xaxis_range_bounds = list(np.linspace(1, 10, 2))
-yaxis_range_bounds = list(np.linspace(0, 100, 2))
+# --- INDEPENDENT BOUNDS ASSIGNMENT SYSTEM ---
+# Bypasses layout limits dictionaries entirely to prevent formatting drop errors
+fig.update_xaxes(range=(1.0, 10.0), title="Operational Score (O)", showgrid=True, gridcolor="#1c2230", tickfont=dict(color="#4d586b", size=9), fixedrange=True, titlefont=dict(size=10, color="#828d9e"))
+fig.update_yaxes(range=(0.0, 100.0), title="Readiness Index %", showgrid=True, gridcolor="#1c2230", tickfont=dict(color="#4d586b", size=9), fixedrange=True, titlefont=dict(size=10, color="#828d9e"))
+
 fig.update_layout(
-xaxis=dict(title="Operational Score (O)", range=xaxis_range_bounds, showgrid=True, gridcolor="#1c2230", tickfont=dict(color="#4d586b", size=9), fixedrange=True, titlefont=dict(size=10, color="#828d9e")),
-yaxis=dict(title="Readiness Index %", range=yaxis_range_bounds, showgrid=True, gridcolor="#1c2230", tickfont=dict(color="#4d586b", size=9), fixedrange=True, titlefont=dict(size=10, color="#828d9e")),
-paper_bgcolor='#151923', plot_bgcolor='#151923',
-margin=dict(l=35, r=10, t=10, b=30), height=210, showlegend=False
+    paper_bgcolor='#151923', plot_bgcolor='#151923',
+    margin=dict(l=35, r=10, t=10, b=30), height=210, showlegend=False
 )
+
 header_placeholder.markdown(f"""
-
-Psychology Multiple Regression Plane
-{status_html}
-
+    <div class='chart-header'>
+        <span class='chart-title'>Psychology Multiple Regression Plane</span>
+        {status_html}
+    </div>
 """, unsafe_allow_html=True)
+
 plot_placeholder.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
+
 metrics_placeholder.markdown(f"""
-
-
-Operational Score
+    <div class='metrics-row'>
+        <div class='metric-box'>
+            <div class='metric-title'>Operational Score</div>
 {op_score:.2f}
 
 
