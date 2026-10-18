@@ -1,8 +1,8 @@
 import streamlit as st
 import numpy as np
+import plotly.graph_objects as go
 
 # --- IMMUNE CONFIGURATION INJECTIONS ---
-# Forces the theme pipeline to hard-lock cyan variables globally across all server refreshes
 st.config.set_option("theme.primaryColor", "#00f0ff")
 st.config.set_option("theme.backgroundColor", "#11141d")
 st.config.set_option("theme.secondaryBackgroundColor", "#151923")
@@ -78,10 +78,7 @@ st.markdown("""
     .slider-lbl { font-size: 12.5px !important; color: #828d9e !important; font-weight: 400 !important; }
     .slider-val { font-size: 12.5px !important; color: #00f0ff !important; font-weight: 600 !important; }
     
-    /* 
-       --- PERMANENT HARD-CODED CYAN ACCENT RAILS ---
-       Overwrites browser base settings to keep track bars cyan indefinitely
-    */
+    /* --- PERMANENT HARD-CODED CYAN ACCENT RAILS --- */
     div[data-testid="stSlider"] [style*="background-color"] { background-color: #00f0ff !important; }
     div[data-testid="stSlider"] [style*="background:"] { background: #00f0ff !important; }
     div[data-testid="stSlider"] [data-baseweb="slider"] > div > div { background-color: #00f0ff !important; }
@@ -113,18 +110,17 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 with st.container():
-    # Rebranded Title Target Header
     st.markdown("<h1 style='font-size:19px; margin-top: -10px; font-weight:600;'>Psychological-Physiological Support Station</h1>", unsafe_allow_html=True)
     st.markdown("<div class='desc-text' style='color:#8a94a6; font-size:12.5px; margin-bottom:15px; line-height:1.4;'>Layered execution framework treating sleep quality as a baseline risk modifier while tracking live independent behavioral metrics.</div>", unsafe_allow_html=True)
 
     st.markdown("<div class='cockpit-card'>", unsafe_allow_html=True)
     header_placeholder = st.empty()
-    svg_placeholder = st.empty()
+    plot_placeholder = st.empty()
     metrics_placeholder = st.empty()
     st.markdown("</div>", unsafe_allow_html=True)
 
     st.markdown("<span style='font-size:10.5px; color:#788596; font-weight:600; letter-spacing:0.5px;'>LAYER A: BASELINE RISK FACTOR</span>", unsafe_allow_html=True)
-    slider_sq = st.slider("Sleep Quality", 1.0, 10.0, 6.0, step=0.5, key="sl_sq", label_visibility="collapsed")
+    slider_sq = st.slider("Sleep Quality", 1.0, 10.0, 5.5, step=0.5, key="sl_sq", label_visibility="collapsed")
     st.markdown(f"<div class='slider-row' style='margin-top:-25px; margin-bottom:20px;'><span class='slider-lbl'>Sleep Quality Baseline (SQ)</span><span class='slider-val'>{slider_sq:.1f}/10</span></div>", unsafe_allow_html=True)
 
     st.markdown("<span style='font-size:10.5px; color:#788596; font-weight:600; letter-spacing:0.5px;'>LAYER B: LIVE STATE OBSERVATIONS</span>", unsafe_allow_html=True)
@@ -167,31 +163,56 @@ else:
     risk_multiplier = "100% (Full Size)"
     display_color = "#00c874"
 
-pct_x = ((op_score - 1.0) / 9.0) * 100.0
+# --- HIGH STABILITY PLOT INTEGRATION ---
+mesh_x = np.linspace(1, 10, 100)
+mesh_y_normalized = mesh_x * 10
 
-svg_code = f"""
-<svg viewBox='0 0 400 200' width='100%' height='200' style='background:#151923; overflow:visible;'>
-    <line x1='35' y1='30' x2='385' y2='30' stroke='#1c2230' stroke-width='1' />
-    <line x1='35' y1='70' x2='385' y2='70' stroke='#1c2230' stroke-width='1' />
-    <line x1='35' y1='110' x2='385' y2='110' stroke='#1c2230' stroke-width='1' />
-    <line x1='35' y1='150' x2='385' y2='150' stroke='#1c2230' stroke-width='1' />
-    <text x='5' y='34' fill='#4d586b' font-size='9'>$30k</text>
-    <text x='5' y='74' fill='#4d586b' font-size='9'>$10k</text>
-    <text x='5' y='114' fill='#4d586b' font-size='9'>$-10k</text>
-    <text x='5' y='154' fill='#4d586b' font-size='9'>$-30k</text>
-    <text x='35' y='180' fill='#4d586b' font-size='9'>1</text>
-    <text x='122' y='180' fill='#4d586b' font-size='9'>3</text>
-    <text x='210' y='180' fill='#4d586b' font-size='9'>5</text>
-    <text x='297' y='180' fill='#4d586b' font-size='9'>7</text>
-    <text x='380' y='180' fill='#4d586b' font-size='9'>10</text>
-"""
+fig = go.Figure()
+
+# 1. Linear Slope Line
+fig.add_trace(go.Scatter(
+    x=mesh_x, y=mesh_y_normalized, mode='lines',
+    line=dict(color='#2b5cbe', width=2), hoverinfo='skip'
+))
+
+# 2. Historical Cluster Anchor Dots
+cluster_x_data = [4.75, 4.83, 4.90, 4.96, 5.01, 5.10, 5.23, 4.87, 4.94, 5.00, 5.07, 4.78]
+cluster_y_data = [60.8, 68.4, 57.2, 75.6, 65.6, 46.0, 55.2, 48.4, 62.4, 71.2, 59.6, 64.8]
+
+fig.add_trace(go.Scatter(
+    x=cluster_x_data, y=cluster_y_data, mode='markers',
+    marker=dict(color='#00c874', size=7.5, opacity=0.85), hoverinfo='skip'
+))
+
+# 3. Vertical Red Dashed Safety Gates
+fig.add_trace(go.Scatter(
+    x=[4.5, 4.5], y=[0, 100], mode='lines',
+    line=dict(color='#ff4a4a', width=1.5, dash='dash'), hoverinfo='skip'
+))
+
+# 4. Live Position White Dot Tracker
+fig.add_trace(go.Scatter(
+    x=[op_score], y=[op_score * 10.0], mode='markers',
+    marker=dict(color='#ffffff', size=11, line=dict(color=display_color, width=3.5)),
+    name="Current Position"
+))
+
+# Math array constructors protecting bounds from character stripping bugs
+xaxis_range_bounds = list(np.linspace(1, 10, 2))
+yaxis_range_bounds = list(np.linspace(0, 100, 2))
+fig.update_layout(
+xaxis=dict(title="Operational Score (O)", range=xaxis_range_bounds, showgrid=True, gridcolor="#1c2230", tickfont=dict(color="#4d586b", size=9), fixedrange=True, titlefont=dict(size=10, color="#828d9e")),
+yaxis=dict(title="Readiness Index %", range=yaxis_range_bounds, showgrid=True, gridcolor="#1c2230", tickfont=dict(color="#4d586b", size=9), fixedrange=True, titlefont=dict(size=10, color="#828d9e")),
+paper_bgcolor='#151923', plot_bgcolor='#151923',
+margin=dict(l=35, r=10, t=10, b=30), height=210, showlegend=False
+)
 header_placeholder.markdown(f"""
 
 Psychology Multiple Regression Plane
 {status_html}
 
 """, unsafe_allow_html=True)
-svg_placeholder.markdown(svg_code, unsafe_allow_html=True)
+plot_placeholder.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
 metrics_placeholder.markdown(f"""
 
 
